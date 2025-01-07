@@ -1,6 +1,5 @@
 import requests
-import json
-import os
+import time
 #from dotenv import load_dotenv
 from tinydb import TinyDB
 import pprint
@@ -34,7 +33,8 @@ def salvar_dados_tiny_db(dados, db_name = "bitcoin.json"):
     print("Dados salvos com sucesso!")
 
 if __name__ == "__main__":
-    dados_json = extract()
-    dados_tratados = transform(dados_json)
-    salvar_dados_tiny_db(dados_tratados)
-    #print(dados_tratados)
+    while True:
+        dados_json = extract()
+        dados_tratados = transform(dados_json)
+        salvar_dados_tiny_db(dados_tratados)
+        time.sleep(15)
