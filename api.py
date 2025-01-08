@@ -55,9 +55,30 @@ def salvar_dados_tiny_db(dados, db_name = "bitcoin.json"):
     db.insert(dados)
     print("Dados salvos com sucesso!")
 """
+def salvar_dados_postgres(dados):
+    """Salva os dados no banco PostgreSQL."""
+    session = Session()
+    novo_registro = BitcoinPreco(**dados)
+    session.add(novo_registro)
+    session.commit()
+    session.close()
+    print(f"[{dados['timestamp']}] Dados salvos no PostgreSQL!")
+
 if __name__ == "__main__":
+    criar_tabela()
+    print("Iniciando ETL com atualização a cada 15 segundos... (CTRL+C para interromper)")
+
     while True:
-        dados_json = extract()
-        dados_tratados = transform(dados_json)
-        salvar_dados_tiny_db(dados_tratados)
-        time.sleep(15)
+        try:
+            dados_json = extract()
+            if dados_json:
+                dados_tratados = transform(dados_json)
+                print("Dados Tratados:", dados_tratados)
+                salvar_dados_postgres(dados_tratados)
+            time.sleep(15)
+        except KeyboardInterrupt:
+            print("\nProcesso interrompido pelo usuário. Finalizando...")
+            break
+        except Exception as e:
+            print(f"Erro durante a execução: {e}")
+            time.sleep(15)
