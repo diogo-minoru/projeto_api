@@ -14,10 +14,14 @@ POSTGRES_PORT = os.getenv("POSTGRES_PORT")
 POSTGRES_DB = os.getenv("POSTGRES_DB")
 
 # Monta a URL de conexão ao banco PostgreSQL (sem ?sslmode=...)
+"""
 DATABASE_URL = (
     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
     f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 )
+"""
+
+DATABASE_URL = "postgresql://bancodedados_6sd5_user:KX1htrnJTKV3y83nz74xdiCMvIEl7SU2@dpg-ctuqev9opnds73c8bvm0-a.oregon-postgres.render.com:5432/bancodedados_6sd5"
 
 # Cria o engine e a sessão
 engine = create_engine(DATABASE_URL)
@@ -36,10 +40,10 @@ def extract():
 load_dotenv()
 
 def transform(dados):
-    valor = dados["amount"]
-    criptomoeda = dados["base"]
-    moeda = dados["currency"]
-    timestamp = datetime.now().timestamp()
+    valor = float(dados["amount"])
+    criptomoeda = str(dados["base"])
+    moeda = str(dados["currency"])
+    timestamp = datetime.now()
 
     dados_transformados = {
         "valor": valor,
@@ -49,6 +53,7 @@ def transform(dados):
     }
 
     return dados_transformados
+
 """
 def salvar_dados_tiny_db(dados, db_name = "bitcoin.json"):
     db = TinyDB(db_name)
