@@ -6,6 +6,8 @@ from database import Base, BitcoinPreco
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+#import logging
+#import logfire
 
 POSTGRES_USER = os.getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
@@ -19,6 +21,15 @@ DATABASE_URL = (
     f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
     f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 )
+"""
+
+"""
+logfire.configure()
+basicConfig(handlers=[logfire.LogfireLoggingHandler()])
+logger = getLogger(__name__)
+logger.setlevel(logging.INFO)
+logfire.instrument_requests()
+logfire.instrument_sqlalchemy()
 """
 
 DATABASE_URL = "postgresql://bancodedados_6sd5_user:KX1htrnJTKV3y83nz74xdiCMvIEl7SU2@dpg-ctuqev9opnds73c8bvm0-a.oregon-postgres.render.com:5432/bancodedados_6sd5"
